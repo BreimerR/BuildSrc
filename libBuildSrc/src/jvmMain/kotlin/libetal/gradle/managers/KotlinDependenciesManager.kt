@@ -3,12 +3,13 @@ package libetal.gradle.managers
 import libetal.gradle.enums.Sources
 import libetal.gradle.enums.Types
 import libetal.gradle.kapt
-import org.jetbrains.kotlin.gradle.plugin.mpp.DefaultKotlinDependencyHandler
+import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
-class KotlinDependenciesManager(handler: DefaultKotlinDependencyHandler) :
-    DependenciesManager<DefaultKotlinDependencyHandler, KotlinDependenciesManager, KotlinDependenciesManager>(handler) {
+class KotlinDependenciesManager(handler: KotlinDependencyHandler, private val project: Project) :
+    DependenciesManager<KotlinDependencyHandler, KotlinDependenciesManager, KotlinDependenciesManager>(handler) {
 
-    override fun DefaultKotlinDependencyHandler.getSource(dependency: Any): Any = with(project) {
+    override fun KotlinDependencyHandler.getSource(dependency: Any): Any = with(project) {
         when (implementationSource) {
             Sources.PROJECT -> project(dependency as String)
             Sources.REMOTE -> dependency
@@ -17,7 +18,7 @@ class KotlinDependenciesManager(handler: DefaultKotlinDependencyHandler) :
         }
     }
 
-    override fun DefaultKotlinDependencyHandler.apply(dependency: Any) = with(project) {
+    override fun KotlinDependencyHandler.apply(dependency: Any) = with(project) {
         when (implementationType) {
             Types.KAPT -> {
                 println("""kapt($dependency)""")
@@ -36,7 +37,7 @@ class KotlinDependenciesManager(handler: DefaultKotlinDependencyHandler) :
                 compileOnly(dependency)
             }
             Types.GRADLE -> {
-                println("""implementation($dependency)""")
+                println("""kotlin implementation($dependency)""")
                 implementation(dependency)
             }
             Types.GRADLE_TEST -> {

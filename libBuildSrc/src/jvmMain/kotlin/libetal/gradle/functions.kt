@@ -7,6 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.plugin.mpp.DefaultKotlinDependencyHandler
 
 
@@ -28,8 +29,8 @@ fun Project.testImplementation(dependencyNotation: Any): Dependency? =
     with(dependencies) { add("testImplementation", dependencyNotation) }
 
 @Suppress("unused")
-fun DefaultKotlinDependencyHandler.add(action: KotlinDependenciesManager.() -> Unit) =
-    dependencyResolver(KotlinDependenciesManager(this), action)
+fun KotlinDependencyHandler.add(project: Project, action: KotlinDependenciesManager.() -> Unit) =
+    dependencyResolver(KotlinDependenciesManager(this, project), action)
 
 private fun <Handler, T, M : DependenciesManager<Handler, T, M>> dependencyResolver(
     dependencyManager: M,
