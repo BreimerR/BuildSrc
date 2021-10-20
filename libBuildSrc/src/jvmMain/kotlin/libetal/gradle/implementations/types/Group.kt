@@ -4,6 +4,7 @@ import libetal.gradle.managers.DependenciesManager
 import libetal.gradle.enums.Sources
 import libetal.gradle.enums.Types
 import libetal.gradle.implementations.Type
+import libetal.gradle.managers.GradleDependencyManager
 
 
 class Group<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
@@ -70,7 +71,7 @@ class Group<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
 
     }
 
-    fun implement(
+    private fun implement(
         artifactId: String,
         version: String = this.version,
         implementationType: Types = manager.implementationType,
@@ -81,7 +82,17 @@ class Group<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
         }
     }
 
-    fun testImplement(artifactId: String, version: String = this.version) =
+    fun implement(
+        artifactId: String,
+        version: String = this.version
+    ) = implement(
+        artifactId,
+        version,
+        manager.implementationType,
+        manager.implementationSource
+    )
+
+    fun GradleDependencyManager.testImplement(artifactId: String, version: String = context.version) =
         implement(artifactId, version, Types.GRADLE_TEST, manager.implementationSource)
 
     fun kaptImplement(artifactId: String, version: String = this.version) =
@@ -95,6 +106,7 @@ class Group<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
         implementationSource: Sources = manager.implementationSource,
         action: Group<Handler, T, Manager>.() -> Unit
     ) = implement(Types.KAPT, implementationSource, action)
+
 }
 
 
