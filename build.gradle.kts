@@ -6,7 +6,6 @@ buildscript {
         maven {
             url = uri("https://plugins.gradle.org/m2/")
         }
-        mavenLocal()
     }
 
 
@@ -21,7 +20,6 @@ buildscript {
 allprojects{
     repositories {
         mavenCentral()
-        mavenLocal()
 
         maven {
             url  = uri("https://plugins.gradle.org/m2/")

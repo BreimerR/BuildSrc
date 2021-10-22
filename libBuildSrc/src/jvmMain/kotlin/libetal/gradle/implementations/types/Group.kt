@@ -4,14 +4,15 @@ import libetal.gradle.managers.DependenciesManager
 import libetal.gradle.enums.Sources
 import libetal.gradle.enums.Types
 import libetal.gradle.implementations.Type
+import libetal.gradle.implementations.VersionedType
 import libetal.gradle.managers.GradleDependencyManager
 
 
 class Group<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
-    private val manager: Manager,
+    manager: Manager,
     private val packageNames: MutableList<String>,
-    val version: String
-) : Type<Handler, T, Manager, Group<Handler, T, Manager>, Group<Handler, T, Manager>>(manager) {
+    version: String
+) : VersionedType<Handler, T, Manager, Group<Handler, T, Manager>, Group<Handler, T, Manager>>(version, manager) {
 
     operator fun String.invoke(
         version: String = this@Group.version,
@@ -95,17 +96,12 @@ class Group<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
     fun GradleDependencyManager.testImplement(artifactId: String, version: String = context.version) =
         implement(artifactId, version, Types.GRADLE_TEST, manager.implementationSource)
 
-    fun kaptImplement(artifactId: String, version: String = this.version) =
-        implement(artifactId, version, Types.KAPT)
-
     fun compileImplement(artifactId: String, version: String = this.version) =
         implement(artifactId, version, Types.COMPILE)
 
 
-    fun kaptImplement(
-        implementationSource: Sources = manager.implementationSource,
-        action: Group<Handler, T, Manager>.() -> Unit
-    ) = implement(Types.KAPT, implementationSource, action)
+
+
 
 }
 

@@ -3,16 +3,17 @@ package libetal.gradle.implementations.types
 import libetal.gradle.managers.DependenciesManager
 import libetal.gradle.implementations.Type
 import libetal.gradle.enums.Types
+import libetal.gradle.implementations.VersionedType
 
 class Jar<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
     path: String,
-    private val manager: Manager,
+    manager: Manager,
     commonLibsPath: String = "",
-    val version: String = "",
-    val versionSeparator: Char? = null,
+    version: String = "",
+    private val versionSeparator: Char? = null,
     private val directorySeparator: Char = '/',
     var libJarPath: String = "build/libs"
-) : Type<Handler, T, Manager, Jar<Handler, T, Manager>, Jar<Handler, T, Manager>>(manager) {
+) : VersionedType<Handler, T, Manager, Jar<Handler, T, Manager>, Jar<Handler, T, Manager>>(version, manager) {
 
     var path: String = ""
         set(value) {

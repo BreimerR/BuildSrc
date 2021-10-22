@@ -22,15 +22,7 @@ class KotlinDependenciesManager(handler: KotlinDependencyHandler, private val pr
         when (implementationType) {
             Types.KAPT -> {
                 println("""kapt($dependency)""")
-
-                when (dependency) {
-                    is Pair<*, *> -> {
-                        val (string, version) = dependency
-
-                        kapt(string as String, version = version as String)
-                    }
-                    else -> throw Exception("Kotlin Dependency has to be a pair of name and version")
-                }
+                kapt(dependency as String)
             }
             Types.COMPILE -> {
                 println("""compileOnly($dependency)""")

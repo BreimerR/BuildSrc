@@ -4,15 +4,16 @@ import libetal.gradle.managers.DependenciesManager
 import libetal.gradle.implementations.Type
 import libetal.gradle.enums.Sources
 import libetal.gradle.enums.Types
+import libetal.gradle.implementations.VersionedType
 
 class Library<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
-    private val manager: Manager,
+    manager: Manager,
     private val group: MutableList<String>,
     private var identifiers: MutableList<String> = mutableListOf(),
     var separator: Char = '-',
-    var version: String,
+    version: String,
     var postFix: String = ""
-) : Type<Handler, T, Manager, Library<Handler, T, Manager>, Library<Handler, T, Manager>>(manager) {
+) : VersionedType<Handler, T, Manager, Library<Handler, T, Manager>, Library<Handler, T, Manager>>(version, manager) {
 
     operator fun String.invoke(version: String = context.version) {
         val prefix = if (identifiers.isEmpty()) ""
@@ -28,14 +29,14 @@ class Library<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
 
         val version = if (version == "") throw Exception(
             """|
-            |Version not provided for $library
-            |Provide on by either 
-            |    artifactId(version)
-            |OR 
-            |    libraryGroup(version){
-            |        ...add artifactID's here
-            |    }
-        """.trimMargin()
+               | Version not provided for $library
+               | Provide on by either 
+               |     artifactId(version)
+               | OR 
+               |     libraryGroup(version){
+               |         ...add artifactID's here
+               |     }
+            """.trimMargin()
         )
         else version
 
@@ -86,11 +87,6 @@ class Library<Handler, T, Manager : DependenciesManager<Handler, T, Manager>>(
         action: Library<Handler, T, Manager>.() -> Unit
     ) =
         implement(Types.KAPT, implementationSource, action)
-
-
-    fun kaptImplement(artifactId: String, version: String = this.version) =
-        implement(Types.KAPT, artifactId, version)
-
 
     fun compileImplement(artifactId: String, version: String = this.version) =
         implement(Types.COMPILE, artifactId, version)

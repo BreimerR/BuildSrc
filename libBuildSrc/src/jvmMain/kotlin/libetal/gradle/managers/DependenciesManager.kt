@@ -167,9 +167,10 @@ abstract class DependenciesManager<Handler, ManagerType, Manager : DependenciesM
     fun <T : Type<Handler, ManagerType, Manager, *, *>> runInSafeState(
         context: T,
         action: T.() -> Unit,
-        stateSaver: Manager.() -> Unit
+        updateVariables: Manager.() -> Unit
     ) {
-        stateSaver(manager)
+        saveState()
+        updateVariables(manager)
         action(context)
         restoreState()
     }
