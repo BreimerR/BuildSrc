@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 val jvmTarget: String by project
 val projectGroup: String by project
 val projectVersion: String by project
@@ -20,42 +18,13 @@ kotlin {
         val jvmMain by getting {
             dependencies {
 
-                implementation("dev.gradleplugins:gradle-api:7.1")
+                compileOnly("dev.gradleplugins:gradle-api:7.1.1")
+                implementation(kotlin("gradle-plugin-api"))
+                compileOnly(files("/home/brymher/.gradle/wrapper/dists/gradle-7.1.1-bin/f29rtwfnc96ub43tt7p47zsru/gradle-7.1.1/lib/gradle-kotlin-dsl-7.1.1.jar"))
+                compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:+")
 
-                implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.1.7")
-
-                implementation("gradle.plugin.org.gradle.kotlin:gradle-kotlin-dsl-plugins:1.1.3")
-
-                implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.1.4")
-
-                implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:+")
-                implementation("org.gradle.kotlin:gradle-kotlin-dsl-conventions:0.7.0")
-                implementation("org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:2.1.7")
-                implementation("org.gradle.kotlin.kotlin-dsl.base:org.gradle.kotlin.kotlin-dsl.base.gradle.plugin:2.1.7")
-                implementation("org.gradle.kotlin.kotlin-dsl.compiler-settings:org.gradle.kotlin.kotlin-dsl.compiler-settings.gradle.plugin:2.1.7")
-                implementation("org.gradle.kotlin.kotlin-dsl.precompiled-script-plugins:org.gradle.kotlin.kotlin-dsl.precompiled-script-plugins.gradle.plugin:2.1.7")
 
             }
         }
     }
 }
-
-
-/*tasks.register<Jar>("fatJar") {
-    group = "build"
-    description = "Assembles Kotlin sources"
-
-    archiveClassifier.set("sources")
-
-    from(sourceSets.main.all().kotlin)
-    dependsOn(tasks["main"])
-}*/
-
-
-/*
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = jvmTarget
-}
-*/
-
-

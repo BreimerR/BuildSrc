@@ -56,7 +56,7 @@ open class GradleDependencyManager(project: Project) :
                     files("$libString$version.jar")
                 }
                 Sources.KOTLIN -> {
-                    println("""kotlin("$libString,"$version")""")
+                    println("""kotlin("$libString","$version")""")
                     TODO("Add Implementation on this: org.gradle.kotlin.dsl dependency not known by me")
                 }
             }

@@ -8,12 +8,12 @@ import libetal.gradle.managers.KotlinDependenciesManager
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
-import org.gradle.api.tasks.bundling.Jar
+import org.gradle.kotlin.dsl.support.delegates.ProjectDelegate
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.kotlin.gradle.plugin.mpp.DefaultKotlinDependencyHandler
 
 
 @Deprecated("Use add instead for consistency")
@@ -44,15 +44,26 @@ private fun <Handler, T, M : DependenciesManager<Handler, T, M>> dependencyResol
 operator fun ConfigurationContainer.get(name: String) = getByName(name)
 
 
-fun KotlinSourceSet.addGeneratedKotlin() = srcDir(
-    "build/generated/source/kaptKotlin/main",
-    "build/generated/source/kapt/main"
+fun KotlinSourceSet.addGeneratedKotlin(
+    kotlinGenerated: String = "build/generated/source/kaptKotlin/main",
+    kaptGenerated: String = "build/generated/source/kapt/main"
+) = srcDir(
+    kotlinGenerated,
+    kaptGenerated
 )
 
-fun KotlinSourceSet.addGeneratedKotlinTest() = srcDir(
-    "build/generated/source/kaptKotlin/test",
-    "build/generated/source/kapt/test"
-)
+fun KotlinSourceSet.addGeneratedCodeSource(buildPath:String){
+    srcDir()
+}
+
+fun KotlinSourceSet.addGeneratedKotlinTest(
+    kaptKotlinGeneratedTest: String = "build/generated/source/kaptKotlin/test",
+    kaptGeneratedTest: String = "build/generated/source/kapt/test"
+) =
+    srcDir(
+        kaptKotlinGeneratedTest,
+        kaptGeneratedTest
+    )
 
 fun KotlinSourceSet.srcDir(vararg path: String): SourceDirectorySet = kotlin.srcDir(path)
 
@@ -78,8 +89,9 @@ fun Project.kapt(dependencyAnnotation: String): Dependency {
 
 }
 
-fun DefaultKotlinDependencyHandler.register(name:String){
-    with(project){
 
-    }
-}
+fun ProjectDelegate.kotlinAdd(action: KotlinDependenciesManager.() -> Unit) =
+    dependencyResolver(KotlinDependenciesManager(dependencies as KotlinDependencyHandler, project), action)
+
+
+
